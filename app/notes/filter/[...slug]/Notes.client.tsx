@@ -14,14 +14,19 @@ import css from "./Notes.client.module.css";
 import { useDebouncedCallback } from "use-debounce";
 import Modal from "@/components/Modal/Modal";
 
-const NotesClient = () => {
+type Props = {
+  tag?: string;
+};
+
+const NotesClient = ({ tag }: Props) => {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState("");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ["notes", page, query],
-    queryFn: () => fetchNotes(query, page, 12),
+    queryKey: ["notes", page, query, tag],
+    queryFn: () => fetchNotes(query, page, 12, tag),
     placeholderData: keepPreviousData,
   });
 
