@@ -14,14 +14,14 @@ const api = axios.create({
 export const fetchNotes = async (
   query: string,
   page: number,
-  perPage: number,
+  perPage?: number,
   tag?: string,
 ): Promise<FetchNotesResponse> => {
   const response = await api.get<FetchNotesResponse>("/notes", {
     params: {
       search: query,
       page,
-      perPage,
+      ...(perPage && { perPage }),
       ...(tag && { tag }),
     },
   });
@@ -32,14 +32,6 @@ export interface CreateNoteData {
   content: string;
   tag: string;
 }
-
-export type Category = {
-  id: string;
-  name: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-};
 
 export const createNote = async (note: CreateNoteData): Promise<Note> => {
   const response = await api.post<Note>("/notes", note);
